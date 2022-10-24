@@ -1,0 +1,93 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2639
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Welcome to Cloud Shell! Type "help" to get started.\
+Your Cloud Platform project in this session is set to qwiklabs-gcp-00-b2cbcc3d7449.\
+Use \'93gcloud config set project [PROJECT_ID]\'94 to change to a different project.\
+student_00_601a94580d97@cloudshell:~ (qwiklabs-gcp-00-b2cbcc3d7449)$ gsutil cp gs://spls/gsp223/examples/* .\
+Copying gs://spls/gsp223/examples/CLOUD1-JSON...\
+Copying gs://spls/gsp223/examples/CLOUD2-JSON...\
+/ [2 files][ 80.5 KiB/ 80.5 KiB]\
+Operation completed over 2 objects/80.5 KiB.\
+student_00_601a94580d97@cloudshell:~ (qwiklabs-gcp-00-b2cbcc3d7449)$ \{\
+  "instances": [\{\
+    "content": "YOUR_IMAGE_BYTES"\
+  \}],\
+  "parameters": \{\
+    "confidenceThreshold": 0.5,\
+    "maxPredictions": 5\
+  \}\
+\}\
+-bash: instances:: command not found\
+-bash: content:: command not found\
+-bash: \}],: command not found\
+-bash: parameters:: command not found\
+-bash: confidenceThreshold:: command not found\
+-bash: maxPredictions:: command not found\
+-bash: syntax error near unexpected token `\}'\
+student_00_601a94580d97@cloudshell:~ (qwiklabs-gcp-00-b2cbcc3d7449)$ ENDPOINT=$(gcloud run services describe automl-service --platform managed --region us-central1 --format 'value(status.url)')\
+student_00_601a94580d97@cloudshell:~ (qwiklabs-gcp-00-b2cbcc3d7449)$ curl -X POST -H "Content-Type: application/json" $ENDPOINT/v1 -d "@$\{INPUT_DATA_FILE\}" | jq\
+Warning: Couldn't read data from file "", this makes an empty POST.\
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\
+                                 Dload  Upload   Total   Spent    Left  Speed\
+100    79  100    79    0     0     28      0  0:00:02  0:00:02 --:--:--    28\
+\{\
+  "error": \{\
+    "code": 400,\
+    "message": "Empty instances.",\
+    "status": "INVALID_ARGUMENT"\
+  \}\
+\}\
+student_00_601a94580d97@cloudshell:~ (qwiklabs-gcp-00-b2cbcc3d7449)$ INPUT_DATA_FILE=CLOUD1-JSON\
+student_00_601a94580d97@cloudshell:~ (qwiklabs-gcp-00-b2cbcc3d7449)$ curl -X POST -H "Content-Type: application/json" $ENDPOINT/v1 -d "@$\{INPUT_DATA_FILE\}" | jq\
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\
+                                 Dload  Upload   Total   Spent    Left  Speed\
+100 15616  100   289  100 15327    575  30531 --:--:-- --:--:-- --:--:-- 31169\
+\{\
+  "predictions": [\
+    \{\
+      "ids": [\
+        "8153295434865967104"\
+      ],\
+      "confidences": [\
+        0.99999547\
+      ],\
+      "displayNames": [\
+        "cirrus"\
+      ]\
+    \}\
+  ],\
+  "deployedModelId": "2918618431559303168",\
+  "model": "projects/1030115194620/locations/us-central1/models/467169296502489088",\
+  "modelDisplayName": "cloud-vertex-model-demo",\
+  "modelVersionId": "1"\
+\}\
+student_00_601a94580d97@cloudshell:~ (qwiklabs-gcp-00-b2cbcc3d7449)$ INPUT_DATA_FILE=CLOUD2-JSON\
+student_00_601a94580d97@cloudshell:~ (qwiklabs-gcp-00-b2cbcc3d7449)$ curl -X POST -H "Content-Type: application/json" $ENDPOINT/v1 -d "@$\{INPUT_DATA_FILE\}" | jq\
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\
+                                 Dload  Upload   Total   Spent    Left  Speed\
+100 67354  100   295  100 67059    695   154k --:--:-- --:--:-- --:--:--  155k\
+\{\
+  "predictions": [\
+    \{\
+      "displayNames": [\
+        "cumulonimbus"\
+      ],\
+      "confidences": [\
+        0.992957354\
+      ],\
+      "ids": [\
+        "659305654921461760"\
+      ]\
+    \}\
+  ],\
+  "deployedModelId": "2918618431559303168",\
+  "model": "projects/1030115194620/locations/us-central1/models/467169296502489088",\
+  "modelDisplayName": "cloud-vertex-model-demo",\
+  "modelVersionId": "1"\
+\}\
+student_00_601a94580d97@cloudshell:~ (qwiklabs-gcp-00-b2cbcc3d7449)$}
